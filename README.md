@@ -1,4 +1,5 @@
 # Exercise-3
 
-Project Ini Menggunakan Jquery dan Ajax
-Menggunakan Framework Bootstrap
+Project Ini Menggunakan <br/>Jquery dan Ajax<br/>
+Menggunakan Framework Bootstrap<br/>
+Request API Json URL Online
