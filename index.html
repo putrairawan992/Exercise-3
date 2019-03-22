@@ -6,6 +6,7 @@
     <title>Putra Irawan</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"/></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"/></script>
+    <link rel="stylesheet" href="./style.css"/>
     <link
       rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"
@@ -13,92 +14,61 @@
   </head>
   <body>
     <div class="container">
-      <h2>Filterable Table<br/> Create By.Putra Irawan</h2>
-      <p>
-        Type something in the input field to search the table for first names,
-        last names or emails:
-      </p>
-      <input
-        class="form-control"
-        id="myInput"
-        type="text"
-        placeholder="Search.."
-      />
-      <br />
-      <table id="myTable" class="table table-bordered table-striped"></table>
-      <p>
-        Loading.....
-      </p>
+      <h2>Filterable Table</h2>
+      <p>Type something in the input field to search the table for first names, last names or emails:</p>
+      <input class="form-control" id="myInput" type="text" placeholder="Search..">
+      <div class="loadable">
+        <div class="loading-mask"></div>
+        <table id="myTable" class="table table-bordered table-striped"></table>
+      </div>
     </div>
   </body>
 
   <script>
-    let ignoreFields = ["created", "edited", "films", "residents", "url"],
-      sortField = "name";
+let ignoreFields = [ 'created', 'edited', 'films', 'residents', 'url' ],
+    sortField    = 'name';
 
-    $(function() {
-      $.ajax({
-        dataType: "json",
-        url: "https://swapi.co/api/planets/?format=json",
-        cache: true,
-        success: function(data) {
-          populateTable(data.results);
-        }
-      });
-      $("#myInput").on("keyup", onFilter);
-    });
-//Crete By: Putra irawan 
-    function populateTable(data) {
-      data.sort((a, b) => {
-        return a[sortField]
-          .toLowerCase()
-          .localeCompare(b[sortField].toLowerCase());
-      });
-
-      var fields = Object.keys(data[0])
-        .sort((a, b) => {
-          if (a === sortField) return -1;
-          if (b === sortField) return 1;
-          return a.toLowerCase().localeCompare(b.toLowerCase());
-        })
-        .filter(x => ignoreFields.indexOf(x) === -1);
-
-      $("#myTable")
-        .append(
-          $("<thead>").append(
-            fields.map(field =>
-              $("<th>")
-                .addClass("text-center")
-                .text(field)
-            )
-          )
-        )
-        .append(
-          $("<tbody>").append(
-            data.map(result =>
-              $("<tr>").append(
-                fields.map(field => $("<td>").text(result[field]))
-              )
-            )
-          )
-        );
+$(function() {
+  $('.loading-mask').show(); // Show mask before request
+  $.ajax({
+    dataType: 'json',
+    url: 'https://swapi.co/api/planets/?format=json',
+    cache: true,
+    success: function(data) {
+      populateTable(data.results);
+      $('.loading-mask').hide(); // Hide mask after response
+    },
+    failure: function(data) {
+      $('.loading-mask').hide(); // Hide mask after response
     }
+  });
+  $('#myInput').on('keyup', onFilter);
+});
 
-    //Create Putra Irawan
+function populateTable(data) {
+  data.sort((a, b) => {
+    return a[sortField].toLowerCase().localeCompare(b[sortField].toLowerCase());
+  });
 
-    function onFilter(e) {
-      let value = $(this)
-        .val()
-        .toLowerCase();
-      $("#myTable tr").filter(function() {
-        $(this).toggle(
-          $(this)
-            .text()
-            .toLowerCase()
-            .indexOf(value) > -1
-        );
-      });
-    }
+  var fields = Object.keys(data[0]).sort((a, b) => {
+    if (a === sortField) return -1;
+    if (b === sortField) return 1;
+    return a.toLowerCase().localeCompare(b.toLowerCase());
+  }).filter(x => ignoreFields.indexOf(x) === -1);
+//Create Logic by Putra irawan
+  $('#myTable')
+    .append($('<thead>')
+      .append(fields.map(field => $('<th>').addClass('text-center').text(field))))
+    .append($('<tbody>')
+      .append(data.map(result => $('<tr>')
+        .append(fields.map(field => $('<td>').text(result[field]))))));
+}
 
+function onFilter(e) {
+  let value = $(this).val().toLowerCase();
+  $('#myTable tr').filter(function() {
+    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+  });
+}
   </script>
 </html>
