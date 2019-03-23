@@ -55,10 +55,11 @@ function populateTable(data) {
     if (b === sortField) return 1;
     return a.toLowerCase().localeCompare(b.toLowerCase());
   }).filter(x => ignoreFields.indexOf(x) === -1);
-//Create Logic by Putra irawan
+
   $('#myTable')
     .append($('<thead>')
-      .append(fields.map(field => $('<th>').addClass('text-center').text(field))))
+      .append($('<tr>')
+        .append(fields.map(field => $('<th>').addClass('text-center').text(field)))))
     .append($('<tbody>')
       .append(data.map(result => $('<tr>')
         .append(fields.map(field => $('<td>').text(result[field]))))));
@@ -66,7 +67,7 @@ function populateTable(data) {
 
 function onFilter(e) {
   let value = $(this).val().toLowerCase();
-  $('#myTable tr').filter(function() {
+  $('#myTable tbody tr').filter(function() {
     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
   });
 }
