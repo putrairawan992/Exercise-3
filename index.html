@@ -44,7 +44,7 @@ $(function() {
   });
   $('#myInput').on('keyup', onFilter);
 });
-
+//Putra Irawan
 function populateTable(data) {
   data.sort((a, b) => {
     return a[sortField].toLowerCase().localeCompare(b[sortField].toLowerCase());
@@ -70,6 +70,6 @@ function onFilter(e) {
   $('#myTable tbody tr').filter(function() {
     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
   });
-}
+}//putra irawan
   </script>
 </html>
